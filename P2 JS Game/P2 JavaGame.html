@@ -1,0 +1,88 @@
+<body>
+  <div div style="position: relative"></div>
+  <div style="position: absolute"></div>
+  <div
+    id="Timer"
+    style="
+      display: inline-flex;
+      flex-direction: column;
+      font-size: x-large;
+      font-weight: bolder;
+      color: whitesmoke;
+    "
+  >
+    <h3>Time Remaining</h3>
+    <h3 id="timer"></h3>
+  </div>
+
+  <div
+    id="gameOver"
+    style="
+      position: absolute;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      font-size: x-large;
+      font-weight: bolder;
+      color: whitesmoke;
+    "
+  >
+    <span> GAME OVER</span>
+    <span>Press R to Restart</span>
+    <span>YOU WIN</span>
+  </div>
+  <div
+    style="
+      position: relative;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      font-size: x-large;
+      font-weight: bolder;
+      color: whitesmoke;
+    "
+  >
+    <h1>Defend the Throne</h1>
+    <span style="font-size: small">
+      Instructions: You must defend the Throne until the time ends otherwise
+      it's GAMEOVER Press R to Restart</span
+    >
+  </div>
+  <div
+    class="canvasCss"
+    style="display: flex; align-items: center; justify-content: center"
+  >
+    <style>
+      body {
+        margin: 0 auto;
+        background-color: black;
+      }
+      #Canvas {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-color: white;
+
+        width: 800px;
+        height: 600px;
+        padding: 0;
+        margin: auto;
+      }
+    </style>
+
+    <canvas id="Canvas" style="display: flex"> </canvas>
+  </div>
+</body>
+
+<script src="P2 JavaGame.js"></script>
