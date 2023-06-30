@@ -10,13 +10,13 @@ class Monster {
     };
     this.width = 20;
     this.height = 20;
-    this.monsterimage = monsterState = 'walkRight';
-    this.lastDirection = "right"
+    this.monsterimage = monsterState = "walkRight";
+    this.lastDirection = "right";
   }
 
   draw() {
-    context.fillStyle = "green";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // context.fillStyle = "green";
+    // context.fillRect(this.position.x, this.position.y, this.width, this.height);
     // context.drawImage(this.image, this.position.x, this.position.y);
   }
 
