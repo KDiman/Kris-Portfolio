@@ -1,30 +1,77 @@
 const canvas = document.querySelector("canvas");
-
 const context = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 800;
 const gravity = 1;
+const isPaused = false;
+let jumping = false;
+const key = {
+  right: {
+    pressed: false,
+  },
+  left: {
+    pressed: false,
+  },
+};
+// window.addEventListener("DOMContentLoaded", (event) => {
+//   const audiobgm = document.querySelector("#audioBgm");
+//   audiobgm.play();
+// });
 
+const monsterImg = new Image();
+monsterImg.src = "MyGameAssets/monsterUpdated.png";
+const monsterSpriteWidth = 60;
+const monsterSpriteHeight = 40;
+let monsterState = "";
+let monsterGameFrame = 0;
+const monsterStaggerFrames = 10;
+const monsterSpriteAnimations = [];
+const monsterAnimationStates = [
+  { name: "walkRight", frames: 6 },
+  { name: "walkLeft", frames: 6 },
+];
+monsterAnimationStates.forEach((monsterState, i) => {
+  let frames = {
+    mloc: [],
+  };
+  for (let j = 0; j < monsterState.frames; j++) {
+    let positionX = j * monsterSpriteWidth;
+    let positionY = i * monsterSpriteHeight;
+    frames.mloc.push({ x: positionX, y: positionY });
+  }
+  monsterSpriteAnimations[monsterState.name] = frames;
+});
 
-// function BGM(){
-//   let bgm = new Audio ="./MyGameAssets/Dungeon.mp3"
-// audio.play} 
-// BGM()
-class Sprite {
-  constructor({ position, imageSrc }) {
-    this.position = position;
-    this.image = new Image();
-    this.image.src = imageSrc;
-  }
-  draw() {
-    if (!this.image) return;
-    context.drawImage(this.image, this.position.x, this.position.y);
-  }
+const playerImg = new Image();
+playerImg.src = "Finn Sprite.png";
+const spriteWidth = 40;
+const spriteHeight = 40;
+let playerState = "";
+let gameFrame = 0;
+const staggerFrames = 10;
+const spriteAnimations = [];
+const animationStates = [
+  { name: "idleRight", frames: 9 },
+  { name: "idleLeft", frames: 9 },
+  { name: "runRight", frames: 6 },
+  { name: "runLeft", frames: 6 },
+  { name: "jumpRight", frames: 1 },
+  { name: "jumpLeft", frames: 1 },
+  { name: "attackRight", frames: 5 },
+  { name: "attackLeft", frames: 5 },
+];
 
-  update() {
-    this.draw();
+animationStates.forEach((state, i) => {
+  let frames = {
+    loc: [],
+  };
+  for (let j = 0; j < state.frames; j++) {
+    let positionX = j * spriteWidth;
+    let positionY = i * spriteHeight;
+    frames.loc.push({ x: positionX, y: positionY });
   }
-}
+  spriteAnimations[state.name] = frames;
+});
 
 class Player {
   constructor() {
@@ -34,33 +81,40 @@ class Player {
       x: 0,
       y: 0,
     };
-    this.width = 10;
-    this.height = 30;
+    this.width = 0;
+    this.height = 40;
     this.attack = {
       position: this.position,
-      width: 30,
+      width: 10,
       height: 20,
     };
     this.isAttacking = false;
+
+    this.hitbox = {
+      x: this.position.x,
+      y: this.position.y,
+    };
+    this.lastDirection = "right";
   }
 
   draw() {
-    context.fillStyle = "red";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-    if (this.isAttacking) {
-      context.fillStyle = "yellow";
-      context.fillRect(
-        this.attack.position.x,
-        this.attack.position.y,
-        this.attack.width,
-        this.attack.height
-      );
-    }
+    // context.fillStyle = "red";
+    // context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // if (this.isAttacking) {
+    //   context.fillStyle = "yellow";
+    //   context.fillRect(
+    //     this.attack.position.x,
+    //     this.attack.position.y,
+    //     this.attack.width,
+    //     this.attack.height
+    //   );
+    // }
   }
 
   update() {
-    context.fillStyle = "0,255,0,0.2";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // context.fillStyle = "rgba (0,255,0,0.2)";
+    // context.fillRect(this.position.x, this.position.y, this.width, this.height);
+
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
@@ -80,34 +134,6 @@ const player = new Player({
   position: {},
 });
 
-class Monster {
-  constructor() {
-    this.position = {
-      x: 50,
-      y: 50,
-    };
-    this.velocity = {
-      x: 0,
-      y: 0,
-    };
-    this.width = 20;
-    this.height = 20;
-  }
-
-  draw() {
-    context.fillStyle = "green";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-  }
-
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-    if (this.position.y + this.height + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity;
-    else this.velocity.y = 0;
-  }
-}
 const monsters = [];
 function spawnMonsters() {
   setInterval(() => {
@@ -128,60 +154,74 @@ function spawnMonsters() {
 }
 
 class Platform {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, image) {
     this.position = {
       x,
       y,
     };
+    this.image = image;
     this.width = width;
     this.height = height;
   }
   draw() {
-    context.fillStyle = "blue";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    context.drawImage(this.image, this.position.x, this.position.y);
   }
 }
 
 class Wall {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, image) {
     this.position = {
       x,
       y,
     };
     this.width = width;
     this.height = height;
+    this.image = image;
   }
   draw() {
-    context.fillStyle = "blue";
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // context.fillStyle = "blue";
+    // context.fillRect(this.position.x, this.position.y, this.width, this.height);
+    context.drawImage(this.image, this.position.x, this.position.y);
   }
 }
-
-const walls = [new Wall(590, 0, 10, 800), new Wall(0, 0, 10, 800)];
-const throne = new Wall(500, 685, 60, 90);
-const platforms = [
-  new Platform(150, 600, 600, 10),
-  new Platform(-525, 700, 600, 10),
-  new Platform(150, 300, 600, 10),
-  new Platform(550, 500, 600, 10),
-  new Platform(550, 200, 600, 10),
-  new Platform(-150, 450, 600, 10),
-  new Platform(-150, 100, 600, 10),
-  new Platform(0, 0, 600, 10),
-  new Platform(0, 790, 600, 10),
+class Throne {
+  constructor(x, y, width, height, image) {
+    this.position = {
+      x,
+      y,
+    };
+    this.width = width;
+    this.height = height;
+    this.image = image;
+  }
+  draw() {
+    context.drawImage(this.image, this.position.x, this.position.y);
+  }
+}
+const WallImage = new Image();
+WallImage.src = "MyGameAssets/Wall1.png";
+const walls = [
+  new Wall(570, 0, 10, 800, WallImage),
+  new Wall(-10, 0, 10, 800, WallImage),
 ];
+const throneImage = new Image();
+throneImage.src = "MyGameAssets/Statue.png";
+const throne = new Throne(500, 690, 40, 90, throneImage);
 
-let jumping = false;
-const key = {
-  right: {
-    pressed: false,
-  },
-  left: {
-    pressed: false,
-  },
-  //   up: { pressed: false },
-};
-// player.draw();
+const platformImage = new Image();
+platformImage.src = "MyGameAssets/brick2.png";
+
+const platforms = [
+  new Platform(150, 600, 600, 10, platformImage),
+  new Platform(-525, 700, 600, 10, platformImage),
+  new Platform(150, 300, 600, 10, platformImage),
+  new Platform(525, 500, 600, 10, platformImage),
+  new Platform(525, 200, 600, 10, platformImage),
+  new Platform(-150, 450, 600, 10, platformImage),
+  new Platform(-150, 100, 600, 10, platformImage),
+  new Platform(300, 780, 700, 10, platformImage),
+  new Platform(-150, 780, 700, 10, platformImage),
+];
 
 const background = new Sprite({
   position: {
@@ -231,29 +271,65 @@ function animate() {
     ) {
       player.isAttacking = false;
       monsters.splice(i, 1);
-
+      attackDamage();
       console.log("hit");
     }
 
     platforms.forEach((platform) => {
       if (
-        monster.position.y - monster.height + monster.velocity.y <=
-          platform.position.y + platform.height &&
-        monster.position.x + monster.height + monster.velocity.x >=
-          platform.position.x &&
+        monster.position.y + monster.height <= platform.position.y &&
         monster.position.y + monster.height + monster.velocity.y >=
           platform.position.y &&
-        monster.position.x - monster.height + monster.velocity.x <=
-          platform.position.x + platform.width
+        monster.position.x + monster.width >= platform.position.x &&
+        monster.position.x <= platform.position.x + platform.width
       ) {
         monster.velocity.y = 0;
         if (monster.velocity.x === 0) {
           monster.velocity.x = 1;
+          monster.lastDirection = "left";
+
+          this.image = monsterState = "walkRight";
         } else if (monster.position.x === 550) {
+          this.image = monsterState = "walkLeft";
+          monster.lastDirection = "right";
           monster.velocity.x = -1;
         } else if (monster.position.x === 50) {
+          this.image = monsterState = "walkRight";
           monster.velocity.x = 1;
+          monster.lastDirection = "left";
         }
+        if (monster.velocity.y < 0) {
+          if ((monster.lastDirection = "left")) {
+            this.image = monsterState = "walkRight";
+          } else if ((monster.lastDirection = "right")) {
+            this.image = monsterState = "walkLeft";
+          }
+        } else if (monster.velocity.y > 0) {
+          if ((monster.lastDirection = "left")) {
+            this.image = monsterState = "walkRight";
+          } else if ((monster.lastDirection = "right")) {
+            this.image = monsterState = "walkLeft";
+          }
+        }
+
+        let monsterPosition =
+          Math.floor(monsterGameFrame / monsterStaggerFrames) %
+          monsterSpriteAnimations[monsterState].mloc.length;
+        let frameMX = monsterSpriteWidth * monsterPosition;
+        let frameMY =
+          monsterSpriteAnimations[monsterState].mloc[monsterPosition].y;
+
+        context.drawImage(
+          monsterImg,
+          frameMX,
+          frameMY,
+          monsterSpriteWidth,
+          monsterSpriteHeight,
+          monster.position.x,
+          monster.position.y,
+          monsterSpriteWidth,
+          monsterSpriteHeight
+        );
       }
     });
 
@@ -268,60 +344,82 @@ function animate() {
         monster.position.x - monster.height + monster.velocity.x <=
           throne.position.x + throne.width
       ) {
-        document.querySelector("#gameOver").innerHTML = "GAME OVER";
-
-        document.querySelector("#gameOver").style.display = "flex";
-        document.querySelector("#Canvas").style.display = "none";
-        document.querySelector("#Timer").style.display = "none";
-        monsters.splice(i, 1);
+        gameOver();
+        monsters.splice(i);
         console.log("Game Over");
       }
     });
   }
 
-  walls.forEach((walls) => {
-    if (
-      player.position.y - player.height + player.velocity.y <=
-        walls.position.y + walls.height &&
-      player.position.x + player.height + player.velocity.x >=
-        walls.position.x &&
-      player.position.y + player.height + player.velocity.y >=
-        walls.position.y &&
-      player.position.x - player.height + player.velocity.x <=
-        walls.position.x + walls.width
-    ) {
-      player.velocity.y = 0;
-      player.velocity.x = 0;
-    }
-  });
-
   platforms.forEach((platform) => {
     if (
-      player.position.y - player.height + player.velocity.y <=
-        platform.position.y + platform.height &&
-      player.position.x + player.height + player.velocity.x >=
-        platform.position.x &&
+      player.position.y + player.height <= platform.position.y &&
       player.position.y + player.height + player.velocity.y >=
         platform.position.y &&
-      player.position.x - player.height + player.velocity.x <=
-        platform.position.x + platform.width
+      player.position.x + player.width >= platform.position.x &&
+      player.position.x <= platform.position.x + platform.width
     ) {
       player.velocity.y = 0;
-      //   player.velocity.x = 0;
     }
   });
   if (key.left.pressed) {
-    player.velocity.x = -5;
+    player.velocity.x = -4;
+    this.image = playerState = "runLeft";
+    player.lastDirection = "right";
+    walkSFX();
   } else if (key.right.pressed) {
-    player.velocity.x = 5;
-    //   } else if (key.up.pressed) {
-    //     player.velocity.y = -10;
+    player.velocity.x = 4;
+    this.image = playerState = "runRight";
+    player.lastDirection = "left";
+    walkSFX();
   } else player.velocity.x = 0;
+
+  if (player.velocity.x === 0)
+    if (player.lastDirection === "left") {
+      this.image = playerState = "idleRight";
+    } else if (player.lastDirection === "right") {
+      this.image = playerState = "idleLeft";
+    }
+
+  if (player.velocity.y > 0) {
+    if (player.lastDirection === "left") {
+      this.image = playerState = "jumpRight";
+    } else if (player.lastDirection === "right") {
+      this.image = playerState = "jumpLeft";
+    }
+  }
+
+  if (player.isAttacking) {
+    if (player.lastDirection === "left") {
+      attackSFX();
+      this.image = playerState = "attackRight";
+    } else if (player.lastDirection === "right") {
+      attackSFX();
+      this.image = playerState = "attackLeft";
+    }
+  }
+
+  let position =
+    Math.floor(gameFrame / staggerFrames) %
+    spriteAnimations[playerState].loc.length;
+  let frameX = spriteWidth * position;
+  let frameY = spriteAnimations[playerState].loc[position].y;
+
+  context.drawImage(
+    playerImg,
+    frameX,
+    frameY,
+    spriteWidth,
+    spriteHeight,
+    player.position.x,
+    player.position.y,
+    spriteWidth,
+    spriteHeight
+  );
+
+  gameFrame++;
 }
 animate();
-spawnMonsters();
-
-// Platform collision detection
 
 function maxJumps() {
   if (player.velocity.y <= 0) {
@@ -330,6 +428,7 @@ function maxJumps() {
   if (player.position.y >= 0) {
     jumping = true;
   }
+  jumpSFX();
 }
 
 let timer = 150;
@@ -340,74 +439,30 @@ function countDown() {
     document.querySelector("#timer").innerHTML = timer;
   }
   if (timer === 0) {
-    document.querySelector("#gameOver").innerHTML = "YOU WIN";
-    document.querySelector("#gameOver").style.display = "flex";
-    document.querySelector("#Canvas").style.display = "none";
-    document.querySelector("#Timer").style.display = "none";
+    youWin();
   }
 }
-countDown();
 
-animate();
-addEventListener("keydown", ({ keyCode }) => {
-  console.log(keyCode);
-  switch (keyCode) {
-    case 65:
-      console.log("left");
-      key.left.pressed = true;
-      break;
-    case 68:
-      console.log("right");
-      key.right.pressed = true;
-      break;
-    case 87:
-      //   key.up.pressed = true;
-      console.log("up");
-      maxJumps();
-      break;
-    case 83:
-      console.log("down");
-      //   player.velocity.y += 5;
-      break;
-    case 74:
-      player.attacking();
-      console.log("attack");
-      break;
-    case 82:
-      location.reload(true);
-      console.log("Restart");
-      break;
-    case 13:
-     
-      console.log("Start");
-      break;
-  }
-});
+function startGame() {
+  document.querySelector("#start").style.display = "none";
+  document.querySelector("#Canvas").style.display = "flex";
+  countDown();
+  spawnMonsters();
+  BGM();
+}
 
-addEventListener("keyup", ({ keyCode }) => {
-  // console.log(keyCode)
-  switch (keyCode) {
-    case 65:
-      console.log("left");
-      key.left.pressed = false;
-      break;
-    case 68:
-      console.log("right");
-      key.right.pressed = false;
-      break;
-    case 87:
-      console.log("up");
-
-      break;
-    case 83:
-      console.log("down");
-      //   player.velocity.y +=5
-      break;
-    case 74:
-      console.log("attack");
-      break;
-    case 75:
-      console.log("shield");
-      break;
-  }
-});
+function gameOver() {
+  document.querySelector("#start").style.display = "none";
+  document.querySelector("#Canvas").style.display = "none";
+  document.querySelector("#gameOver").style.display = "flex";
+  document.querySelector("#timer").style.display = "none";
+  document.querySelector("#youWin").style.display = "none";
+}
+function youWin() {
+  document.querySelector("#gameOver").style.display = "none";
+  document.querySelector("#start").style.display = "none";
+  document.querySelector("#Canvas").style.display = "none";
+  document.querySelector("#youWin").style.display = "flex";
+  document.querySelector("#timer").style.display = "none";
+  startbgm.play();
+}
