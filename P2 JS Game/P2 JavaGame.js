@@ -431,7 +431,7 @@ function maxJumps() {
   jumpSFX();
 }
 
-let timer = 150;
+let timer = 60;
 function countDown() {
   setTimeout(countDown, 1000);
   if (timer > 0) {
