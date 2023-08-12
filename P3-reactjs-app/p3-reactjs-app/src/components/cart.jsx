@@ -1,4 +1,8 @@
+import React, { useState } from "react";
+import CheckoutPage from "../pages/CheckoutPage";
 const Cart = ({ cart, dispatch }) => {
+  const [cartItems, setCartItems] = useState([...cart]);
+
   const calculateTotal = () => {
     let total = 0;
     for (const item of cart) {
@@ -17,7 +21,7 @@ const Cart = ({ cart, dispatch }) => {
             <img className="cart-image" src={item.Image} alt={item.Name} />
             <span className="cart-price">₱{item.Price}</span>
             <div className="qauntityContainer">
-              <span>Qauntity</span>
+              <span>Qauntity:</span>
               <button
                 onClick={() =>
                   dispatch({
@@ -29,21 +33,18 @@ const Cart = ({ cart, dispatch }) => {
               >
                 -
               </button>
-              <span className="quantity">
-                {item.quantity}
-
-                <button
-                  onClick={() =>
-                    dispatch({
-                      type: "UPDATE_QUANTITY",
-                      payload: { Name: item.Name, quantityChange: 1 },
-                    })
-                  }
-                  className="quantityBtn"
-                >
-                  +
-                </button>
-              </span>
+              <span className="quantity">{item.quantity}</span>
+              <button
+                onClick={() =>
+                  dispatch({
+                    type: "UPDATE_QUANTITY",
+                    payload: { Name: item.Name, quantityChange: 1 },
+                  })
+                }
+                className="quantityBtn"
+              >
+                +
+              </button>
             </div>
 
             <button
@@ -60,6 +61,7 @@ const Cart = ({ cart, dispatch }) => {
       <div className="total">
         <strong>Total Amount:</strong> ₱{calculateTotal()}
       </div>
+      <CheckoutPage cartItems={cartItems} />
     </div>
   );
 };

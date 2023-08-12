@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
 import { TfiInstagram, TfiFacebook } from "react-icons/tfi";
 import { FaTiktok } from "react-icons/fa";
-
 import Modal from "./Modal";
 
 const Navbar = ({ items, setItems, originalItems }) => {
@@ -10,24 +9,31 @@ const Navbar = ({ items, setItems, originalItems }) => {
 
   const [searchBar, setSearchBar] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+  const [openAnnouncementModal, setOpenAnnouncementModal] = useState(false);
   const [selectedtype, setSelectedType] = useState("");
-
-  const skincare = [...new Set(originalItems.map((item) => item.Type))];
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-    applySearchFilter(event.target.value);
+  const handleAnnouncementModal = () => {
+    setOpenAnnouncementModal(!openAnnouncementModal);
   };
 
   const applySearchFilter = (query) => {
-    const filteredItems = originalItems.filter(
-      (item) =>
-        item.Name.toLowerCase().includes(query.toLowerCase()) ||
-        item.Brand.toLowerCase().includes(query.toLowerCase())
-    );
+    const filteredItems = originalItems.filter((item) => {
+      const lowerCaseQuery = query.toLowerCase();
+      return item.Name.toLowerCase().includes(lowerCaseQuery);
+    });
     setItems(filteredItems);
+  };
+
+  const resetSorting = () => {
+    setSelectedType("");
+    setItems(originalItems);
+  };
+
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    applySearchFilter(query);
   };
 
   const handleTypeChange = (type) => {
@@ -50,6 +56,9 @@ const Navbar = ({ items, setItems, originalItems }) => {
         <AiOutlineMenu className="burger" />
       </div>
       <div className="navBar">
+        <h3 className="navbarList" onClick={resetSorting}>
+          All Products
+        </h3>
         <h3
           className="navbarList"
           onClick={() => handleTypeChange("Skin Care")}
@@ -63,7 +72,9 @@ const Navbar = ({ items, setItems, originalItems }) => {
         <h3 className="navbarList" onClick={() => handleTypeChange("Others")}>
           Others
         </h3>
-        <h3 className="navbarList">Mini's</h3>
+        <h3 className="navbarList" onClick={handleAnnouncementModal}>
+          Mini's
+        </h3>
         <h3 className="navbarList" onClick={() => setOpenModal(true)}>
           Track Order
         </h3>
@@ -72,7 +83,7 @@ const Navbar = ({ items, setItems, originalItems }) => {
         <div className="searchBar">
           <input
             className={searchBar ? "inputSearch active" : "inputSearch"}
-            type="search"
+            type="text"
             placeholder="Search"
             value={searchQuery}
             onChange={handleSearch}
@@ -94,6 +105,9 @@ const Navbar = ({ items, setItems, originalItems }) => {
         <h2 className="burgerName">Sadie Online Shop</h2>
         <nav>
           <ul>
+            <li className="burgerList" onClick={resetSorting}>
+              All Products
+            </li>
             <li
               className="burgerList"
               onClick={() => handleTypeChange("Skin Care")}
@@ -106,7 +120,9 @@ const Navbar = ({ items, setItems, originalItems }) => {
             >
               Make Up
             </li>
-            <li className="burgerList">Mini's</li>
+            <li className="burgerList" onClick={handleAnnouncementModal}>
+              Mini's
+            </li>
             <li
               className="burgerList"
               onClick={() => handleTypeChange("Others")}
@@ -122,17 +138,17 @@ const Navbar = ({ items, setItems, originalItems }) => {
           <h2 className="followUs">Follow Us</h2>
           <div className="social-icons">
             <a href="https://www.facebook.com/SadieOnlineShoppe/">
-              <i className="fab fa-facebook">
+              <i className="facebook">
                 <TfiFacebook className="socialIconsBurger" />
               </i>
             </a>
-            <a href="#">
-              <i className="fab fa-tiktok">
+            <a href="https://www.tiktok.com/@SadieOnlineShoppe?fbclid=IwAR3gadYaV-tAr-OORcmaR17d06j4fxhJLmZMluAtkCbKBmjVlDHGEnUB8jA">
+              <i className="tiktok">
                 <FaTiktok className="socialIconsBurger" />
               </i>
             </a>
             <a href="https://www.instagram.com/sadieonlineshoppe/">
-              <i className="fab fa-instagram">
+              <i className="instagram">
                 <TfiInstagram className="socialIconsBurger" />
               </i>
             </a>
@@ -140,7 +156,29 @@ const Navbar = ({ items, setItems, originalItems }) => {
         </div>
       </div>
 
-      <Modal open={openModal} onClose={() => setOpenModal(!openModal)} />
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <iframe
+          className="frame"
+          src="https://www.jtexpress.ph/index/query/gzquery.html"
+        ></iframe>
+      </Modal>
+
+      <Modal
+        className="annoucement"
+        open={openAnnouncementModal}
+        onClose={handleAnnouncementModal}
+      >
+        <h2>Announcement</h2>
+        <p>
+          Please Follow us on our Instagram for more details on the release of
+          the next batch of Mini's
+        </p>
+        <a href="https://www.instagram.com/sadieonlineshoppe/">
+          <i className="instagram">
+            <TfiInstagram className="socialIconsBurger" />
+          </i>
+        </a>
+      </Modal>
     </div>
   );
 };

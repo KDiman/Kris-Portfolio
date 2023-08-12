@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useOpenDiv } from "./opendivcontext";
 
 const SortItems = ({ items, setItems, originalItems }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [priceSort, setPriceSort] = useState("");
+  const { isOpen, setIsOpen } = useOpenDiv();
 
   const categories = [...new Set(originalItems.map((item) => item.Category))];
   const brands = [...new Set(originalItems.map((item) => item.Brand))];
+
+  useEffect(() => {
+    setIsOpen(originalItems.length > 0 ? false : true);
+  }, [originalItems]);
 
   const applySorting = () => {
     let sortedItems = [...originalItems];
@@ -29,8 +35,14 @@ const SortItems = ({ items, setItems, originalItems }) => {
     setItems(
       sortedItems.length > 0
         ? sortedItems
-        : [{ Name: "Sorry, we do not have an item matching your criteria" }]
-    );
+        : [
+            {
+              Image: "https://www.ipack.com/media/icons/empty-cart-ipack.png",
+              className: "empty-cart-image",
+            },
+          ]
+    ),
+      setIsOpen(sortedItems.length === 0);
   };
 
   const handleCategoryChange = (event) => {

@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/Homepage";
 import { ItemsProvider } from "./components/itemProvider";
-import Itempage from "./pages/Itempage";
-import Modal from "./components/Modal";
+import CheckoutPage from "./pages/CheckoutPage";
+import { OpenDivProvider } from "./components/opendivcontext";
 
 const router = createBrowserRouter([
   {
@@ -12,14 +11,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/:id",
-    element: <Itempage />,
+    element: <CheckoutPage />,
   },
 ]);
 
 function App() {
   return (
     <ItemsProvider>
-      <RouterProvider router={router} />
+      <OpenDivProvider>
+        <RouterProvider router={router} />
+      </OpenDivProvider>
     </ItemsProvider>
   );
 }

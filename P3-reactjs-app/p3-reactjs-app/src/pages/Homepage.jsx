@@ -6,6 +6,8 @@ import Items from "../components/items.jsx";
 import Navbar from "../components/navbar.jsx";
 import SortItems from "../components/sortItems.jsx";
 import Footer from "../components/footer.jsx";
+import { Link } from "react-router-dom";
+import queryString from "query-string";
 
 const cartReducer = (state, action) => {
   switch (action.type) {
@@ -30,6 +32,8 @@ const cartReducer = (state, action) => {
           : item
       );
       return updatedState.filter((item) => item.quantity > 0);
+    case "CHECKOUT":
+      return [];
     default:
       return state;
   }
@@ -45,9 +49,18 @@ const HomePage = () => {
 
   const totalCartItems = cart.reduce((total, item) => total + item.quantity, 0);
 
+  const startCheckout = () => {
+    const cartItemsString = queryString.stringify({
+      cart: JSON.stringify(cart),
+    });
+    const checkoutUrl = `/checkout?${cartItemsString}`;
+    window.location.href = checkoutUrl;
+  };
+
   const addToCart = (item) => {
     dispatch({ type: "ADD_ITEM", payload: item });
   };
+  const cartJson = JSON.stringify(cart);
 
   const products = (filteredItems.length > 0
     ? filteredItems
@@ -60,6 +73,14 @@ const HomePage = () => {
     setOriginalItems(items);
     setFilteredItems(items);
   }, [items]);
+
+  const checkout = () => {
+    const cartItemsString = queryString.stringify({
+      cart: JSON.stringify(cart),
+    });
+    const checkoutUrl = `/checkout?${cartItemsString}`;
+    window.location.href = checkoutUrl;
+  };
 
   return (
     <div>
@@ -96,7 +117,12 @@ const HomePage = () => {
         <div>
           <Cart cart={cart} dispatch={dispatch} />
         </div>
-        <button className="checkOutBtn">Check Out</button>
+        <Link
+          className="checkoutBtn"
+          to={`/checkout?cart=${encodeURIComponent(cartJson)}`}
+        >
+          Checkout
+        </Link>
       </div>
       <div>
         <Footer />
