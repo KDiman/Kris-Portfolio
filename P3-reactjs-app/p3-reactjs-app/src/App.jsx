@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/Homepage";
-import { ItemsProvider } from "./components/itemProvider";
+import { ItemsProvider } from "./components/itemprovider";
 import CheckoutPage from "./pages/CheckoutPage";
 import { OpenDivProvider } from "./components/opendivcontext";
 
