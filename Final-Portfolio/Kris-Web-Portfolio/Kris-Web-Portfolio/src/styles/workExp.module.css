@@ -1,0 +1,71 @@
+
+.workExperienceContainer {
+  display: flex;
+    position: absolute;
+    flex-direction: column;
+    max-width: 80%; 
+    margin: 20px;
+    z-index: 10;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: max-width 0.3s ease, top 0.3s ease, transform 0.3s ease;
+}
+
+  
+  .workExperienceTitle {
+    font-size: 4vh;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .workExperienceList {
+    font-size: 2vh;
+    line-height: 1.5;
+    margin: 5px 0;
+  }
+  .workExperienceCompany {
+   font-weight: bold;
+   font-size: 3vh;
+  }
+  
+  .trainingTitle {
+    font-size: 4vh;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .trainingText {
+    font-size: 2vh;
+    line-height: 1.5;
+  }
+  @media (max-width: 900px) {
+    .workExperienceContainer {
+      max-width: 90%; /* Increase max width for better readability on mobile */
+      top: 50%; /* Adjust top position for mobile */
+      width: 50%;
+    }
+  
+    .workExperienceTitle {
+      font-size: 2vh; /* Adjust title font size for mobile */
+    }
+  
+    .workExperienceList {
+      font-size: 1.5vh; /* Adjust text font size for mobile */
+    }
+  
+    .workExperienceCompany {
+      font-size: 1.8vh; /* Adjust company font size for mobile */
+    }
+  
+    .trainingTitle {
+      font-size: 2vh; /* Adjust training title font size for mobile */
+    }
+  
+    .trainingText {
+      font-size: 1.5vh; /* Adjust training text font size for mobile */
+    }
+  }

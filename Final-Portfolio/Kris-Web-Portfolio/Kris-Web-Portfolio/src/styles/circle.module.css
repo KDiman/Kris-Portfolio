@@ -1,0 +1,50 @@
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vh;
+  height: 90vh;
+  background-color: #1f8a70;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #d7f150, #2dc59f);
+  transition: all 0.5s ease-in-out; /* Increase duration and use ease-in-out timing function */
+}
+
+.img {
+  position: absolute;
+  width: 120vh;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: all 0.5s ease-in-out; /* Increase duration and use ease-in-out timing function */
+}
+
+.logo {
+  position: fixed;
+  display: block;
+  width: 12vh;
+  left: 4%;
+  top: 5%;
+  transition: all 0.5s ease-in-out; /* Increase duration and use ease-in-out timing function */
+}
+
+@media (max-width: 900px) {
+  .circle {
+    width: 60vh; /* Adjust size for smaller screens */
+    height: 60vh;
+    transform: translate(-50%, 15%);
+    position: fixed;
+  }
+
+  .img {
+    width: 60vh; /* Adjust size for smaller screens */
+    transform: translate(-50%, -20%);
+    position: fixed;
+  }
+
+  .logo {
+    width: 5vh; /* Adjust size for smaller screens */
+  }
+}

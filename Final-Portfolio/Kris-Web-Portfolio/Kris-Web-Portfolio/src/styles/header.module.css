@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    position: absolute;
+    bottom: 0%;
+    left: 5%;
+    color: rgb(22, 21, 21);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    margin: 0;
+    
+
+  }
+  
+  .content {
+    padding: 5px;
+    margin: 0;
+    font-size: 4vh;
+  }
+  
+  @media (max-width: 900px) {
+    .container {
+      width: 90%;
+      left: 5%;
+      bottom: 35%;
+      left: 10%;
+      position: fixed;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      width: 100%;
+      left: 0;
+    }
+    .content {
+      font-size: 3vh; 
+    }
+  }

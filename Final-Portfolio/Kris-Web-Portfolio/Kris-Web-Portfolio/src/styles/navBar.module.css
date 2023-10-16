@@ -1,0 +1,72 @@
+.navBarContainer {
+  display: inline-flex;
+  flex-direction: column;
+  position: fixed;
+  top: 5%;
+  left: 10%;
+  padding: 10px;
+  font-size: 3vh;
+  z-index: 2;
+}
+
+.aboutMe {
+  margin-right: 10px;
+
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.aboutMe:hover {
+  color: #fc7300;
+  transform: scale(1.2); 
+  transition: transform 0.3s ease;
+}
+
+.workExperience {
+  font-weight: bold;
+  cursor: pointer;
+ 
+}
+
+.workExperience:hover {
+  color: #fc7300;
+  transform: scale(1.2); 
+  transition: transform 0.3s ease;
+}
+
+.contacts{
+    font-weight: bold;
+    cursor: pointer;
+  }
+.contacts:hover {
+  color: #fc7300;
+  transform: scale(1.2); 
+  transition: transform 0.3s ease;
+}
+
+@media (max-width:900px) {
+  .navBarContainer {
+    position: static; 
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+    padding: 0;
+    transform: translate(15%, -700%);
+  }
+
+  .aboutMe,
+  .workExperience,
+  .contacts {
+    font-weight: bold;
+    font-size: 2vh; 
+    margin-right: 20px; 
+  }
+
+  .aboutMe:hover,
+  .workExperience:hover,
+  .contacts:hover {
+    color: #fc7300;
+    transform: scale(1.2); 
+    transition: transform 0.3s ease;
+  }
+}

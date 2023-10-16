@@ -1,0 +1,125 @@
+/* aboutMe.module.css */
+.aboutMeContainer {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  max-width: 80%;
+  margin: 20px;
+  z-index: 10;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.aboutMeTitle {
+  font-size: 4vh;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.aboutMeText {
+  font-size: 2vh;
+  line-height: 1.5;
+}
+
+.aboutMeText p {
+  margin: 0;
+}
+
+.skillsContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 2vh;
+  text-align: center;
+}
+
+.skillsHeader {
+  font-size: 4vh;
+}
+
+.skillSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.skillCategory {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.iconContainer {
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 2vh;
+}
+
+.htmlIcon {
+  font-size: 5.7vh;
+  color: #f16226;
+}
+.cssIcon {
+  font-size: 6vh;
+  color: #007bff;
+}
+.jsIcon {
+  font-size: 6vh;
+  color: #87ce18;
+}
+.nodeJsIcon {
+  font-size: 6vh;
+  color: #80bc04;
+}
+.mongoDbIcon {
+  font-size: 6vh;
+  color: #429e3b; /* Change the color as desired */
+}
+
+@media (max-width: 900px) {
+  /* Adjust styles for screens with a maximum width of 768px (typical for mobile devices) */
+  .aboutMeContainer {
+    max-width: 100%; /* Increase max width for better readability on mobile */
+    padding: 10px; /* Reduce padding for mobile */
+    width: 70%;
+  }
+
+  .aboutMeTitle {
+    font-size: 2vh;
+  }
+
+  .aboutMeText {
+    font-size: 1.5vh;
+  }
+
+  .skillsHeader {
+    font-size: 1.5vh;
+  }
+  .htmlIcon {
+    font-size: 2.7vh;
+  }
+  .cssIcon {
+    font-size: 3vh;
+  }
+  .jsIcon {
+    font-size: 3vh;
+  }
+  .nodeJsIcon {
+    font-size: 3vh;
+  }
+  .mongoDbIcon {
+    font-size: 3vh;
+  }
+  .iconContainer {
+    font-size: 1vh;
+  }
+  .skillsHeader {
+    font-size: 2vh;
+  }
+  .skillCategory {
+    font-size: 2vh;
+  }
+}
